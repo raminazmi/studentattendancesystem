@@ -1,4 +1,5 @@
-
+### Laravel Setup
+1. **Install Composer**: Laravel uses Composer to manage its dependencies. You can install Composer by following the instructions [here](https://getcomposer.org/download/).
 2. **Clone the repository**:
    ```bash
    git clone https://github.com/yourusername/sweet-treats-management.git
