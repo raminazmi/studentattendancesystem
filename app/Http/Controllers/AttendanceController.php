@@ -42,7 +42,7 @@ class AttendanceController extends Controller
         try {
             $validated = $request->validate([
                 'student_id' => ['required', 'exists:students,id'],
-                'class_id' => ['required', 'exists:class_rooms,id'],
+                'class_id' => ['required', 'exists:classes,id'],
                 'date' => ['required', 'date'],
                 'status' => ['required', 'in:present,absent,late'],
                 'notes' => ['nullable', 'string', 'max:255']
@@ -86,7 +86,7 @@ class AttendanceController extends Controller
         try {
             $validated = $request->validate([
                 'student_id' => ['required', 'exists:students,id'],
-                'class_id' => ['required', 'exists:class_rooms,id'],
+                'class_id' => ['required', 'exists:classes,id'],
                 'date' => ['required', 'date'],
                 'status' => ['required', 'in:present,absent,late'],
                 'notes' => ['nullable', 'string', 'max:255']

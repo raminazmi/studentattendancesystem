@@ -19,9 +19,9 @@ export default function AddStudentPage({ auth, classes }) {
         phone: '',
         class_id: '',
         parent_whatsapp: '',
-        cycle: 'general',  // تعيين قيمة افتراضية
-        grades: 0,  // تعيين قيمة افتراضية
-        path: 'general',  // تعيين قيمة افتراضية
+        cycle: 0,
+        grades: 0,
+        path: 'general',
     });
     const [errors, setErrors] = useState({});
 
@@ -34,6 +34,7 @@ export default function AddStudentPage({ auth, classes }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         let validationErrors = {};
+
         if (!form.name) validationErrors.name = 'حقل الاسم مطلوب';
         if (!form.email) validationErrors.email = 'حقل البريد الإلكتروني مطلوب';
         if (!form.phone) validationErrors.phone = 'حقل الهاتف مطلوب';
@@ -41,7 +42,7 @@ export default function AddStudentPage({ auth, classes }) {
         if (!form.parent_whatsapp) validationErrors.parent_whatsapp = 'حقل واتساب ولي الأمر مطلوب';
         if (!form.cycle) validationErrors.cycle = 'حقل الدورة مطلوب';
         if (form.grades === null || form.grades === '') validationErrors.grades = 'حقل الدرجات مطلوب';
-        if (!form.path) validationErrors.path = 'حقل المسار مطلوب'; 
+        if (!form.path) validationErrors.path = 'حقل المسار مطلوب';
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -50,9 +51,9 @@ export default function AddStudentPage({ auth, classes }) {
 
         Inertia.post('/dashboard/students', form, {
             onError: (errors) => {
-                setErrors(errors);
+                setErrors(prevErrors => ({ ...prevErrors, ...errors }));
             },
-            preserveScroll: true
+            preserveScroll: true,
         });
     };
 
@@ -108,18 +109,6 @@ export default function AddStudentPage({ auth, classes }) {
                                     </div>
                                     <div className='flex justify-between gap-6'>
                                         <div className='w-full'>
-                                            <InputLabel value={t['phone']} />
-                                            <TextInput
-                                                id="phone"
-                                                type="tel"
-                                                name="phone"
-                                                className={`mt-1 block w-full ${isDark ? 'bg-DarkBG1' : 'bg-TextLight'}`}
-                                                value={form.phone}
-                                                onChange={handleChange}
-                                            />
-                                            {errors.phone && <InputError message={errors.phone} className="mt-2" />}
-                                        </div>
-                                        <div className='w-full'>
                                             <InputLabel value={t['select_class']} />
                                             <select
                                                 id="class_id"
@@ -137,11 +126,35 @@ export default function AddStudentPage({ auth, classes }) {
                                             </select>
                                             {errors.class_id && <InputError message={errors.class_id} className="mt-2" />}
                                         </div>
+                                        <div className='w-full'>
+                                            <InputLabel value={t['phone']} />
+                                            <TextInput
+                                                id="phone"
+                                                type="tel"
+                                                name="phone"
+                                                className={`mt-1 block w-full ${isDark ? 'bg-DarkBG1' : 'bg-TextLight'}`}
+                                                value={form.phone}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.phone && <InputError message={errors.phone} className="mt-2" />}
+                                        </div>
                                     </div>
                                     <div className='flex justify-between gap-6'>
                                         <div className='w-full'>
+                                            <InputLabel value={t['parent_whatsapp']} />
+                                            <TextInput
+                                                id="parent_whatsapp"
+                                                type="tel"
+                                                name="parent_whatsapp"
+                                                className={`mt-1 block w-full ${isDark ? 'bg-DarkBG1' : 'bg-TextLight'}`}
+                                                value={form.parent_whatsapp}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.parent_whatsapp && <InputError message={errors.parent_whatsapp} className="mt-2" />}
+                                        </div>
+                                        <div className='w-full'>
                                             <InputLabel value={t['cycle']} />
-                                            <input
+                                            <TextInput
                                                 id="cycle"
                                                 name="cycle"
                                                 type="number"
@@ -151,9 +164,11 @@ export default function AddStudentPage({ auth, classes }) {
                                             />
                                             {errors.cycle && <InputError message={errors.cycle} className="mt-2" />}
                                         </div>
+                                    </div>
+                                    <div className='flex justify-between gap-6'>
                                         <div className='w-full'>
                                             <InputLabel value={t['grades']} />
-                                            <input
+                                            <TextInput
                                                 id="grades"
                                                 name="grades"
                                                 type="number"
@@ -163,20 +178,20 @@ export default function AddStudentPage({ auth, classes }) {
                                             />
                                             {errors.grades && <InputError message={errors.grades} className="mt-2" />}
                                         </div>
-                                    </div>
-                                    <div>
-                                        <InputLabel value={t['path']} />
-                                        <select
-                                            id="path"
-                                            name="path"
-                                            className={`appearance-none mt-1 shadow-sm focus:border-primaryColor focus:ring-primaryColor h-[45px] mt-3 block w-full p-2 border-none rounded ${isDark ? 'bg-DarkBG1 text-TextLight' : 'bg-TextLight text-TextDark'}`}
-                                            value={form.path}
-                                            onChange={handleChange}
-                                        >
-                                            <option value="general">{t['general']}</option>
-                                            <option value="advanced">{t['advanced']}</option>
-                                        </select>
-                                        {errors.path && <InputError message={errors.path} className="mt-2" />}
+                                        <div className='w-full'>
+                                            <InputLabel value={t['path']} />
+                                            <select
+                                                id="path"
+                                                name="path"
+                                                className={`appearance-none mt-1 shadow-sm focus:border-primaryColor focus:ring-primaryColor h-[45px] mt-3 block w-full p-2 border-none rounded ${isDark ? 'bg-DarkBG1 text-TextLight' : 'bg-TextLight text-TextDark'}`}
+                                                value={form.path}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="general">{t['general']}</option>
+                                                <option value="advanced">{t['advanced']}</option>
+                                            </select>
+                                            {errors.path && <InputError message={errors.path} className="mt-2" />}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex justify-end">

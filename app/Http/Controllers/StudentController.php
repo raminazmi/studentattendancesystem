@@ -29,17 +29,16 @@ class StudentController extends Controller
     {
         $classes = ClassRoom::select('id', 'name')->get();
         return Inertia::render('Students/Create', [
-            'classes' => $classes
+            'classes' => $classes,
         ]);
     }
-
 
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:students'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:students,email,'],
                 'phone' => ['nullable', 'string', 'max:15'],
                 'class_id' => ['required', 'exists:classes,id'],
                 'parent_whatsapp' => ['nullable', 'string', 'max:20'],
@@ -61,6 +60,7 @@ class StudentController extends Controller
             ]);
 
             Student::create($validated);
+
             return Inertia::location(route('students.index'));
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors());
